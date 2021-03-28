@@ -68,6 +68,8 @@ struct individual{
 	short vaccine_status;
 	short vaccine_status_next;
 	event *vaccine_wane_event;
+
+	int immune_to_strain[N_STRAINS];
 };
 
 struct interaction{
@@ -95,6 +97,7 @@ struct infection_event{
 	int is_case;
 	int network_id;
 	float strain_multiplier;
+	int strain_idx;
 };
 
 /************************************************************************/

@@ -658,7 +658,7 @@ void set_up_seed_infection( model *model )
 
 		if( !params->hospital_on || indiv->worker_type == NOT_HEALTHCARE_WORKER )
 		{
-			if( seed_infect_by_idx( model, indiv->idx, 1, -1 ) )
+			if( seed_infect_by_idx( model, indiv->idx, 1, 0, -1 ) )
 				idx++;
 		}
 	}

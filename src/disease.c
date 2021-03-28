@@ -256,6 +256,7 @@ short seed_infect_by_idx(
 	model *model,
 	long pdx,
 	float strain_multiplier,
+	int strain_idx,
 	int network_id
 )
 {
@@ -265,6 +266,7 @@ short seed_infect_by_idx(
 		return FALSE;
 
 	infected->infection_events->strain_multiplier = strain_multiplier;
+	infected->infection_events->strain_idx = strain_idx;
 	new_infection( model, infected, infected, network_id );
 	return TRUE;
 }
@@ -293,6 +295,7 @@ void new_infection(
 	infected->infection_events->infector_hospital_state = infector->hospital_state;
 	infected->infection_events->network_id = network_id;
 	infected->infection_events->strain_multiplier = infector->infection_events->strain_multiplier;
+	infected->infection_events->strain_idx = infector->infection_events->strain_idx;
 
 	if( draw < asymp_frac )
 	{
