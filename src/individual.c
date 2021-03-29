@@ -10,6 +10,7 @@
 #include "constant.h"
 #include "utilities.h"
 #include "model.h"
+#include "disease.h" // for sample_transition_time()
 
 /*****************************************************************************************
 *  Name:		initialize_individual
@@ -96,7 +97,10 @@ void initialize_hazard(
 	parameters *params
 )
 {
-	indiv->hazard = gsl_ran_exponential( rng, 1.0 ) / params->adjusted_susceptibility[indiv->age_group];
+	int idx;
+
+	for( idx = 0; idx < N_STRAINS; idx++ )
+		indiv->hazard[idx] = gsl_ran_exponential( rng, 1.0 ) / params->adjusted_susceptibility[indiv->age_group];
 }
 
 /*****************************************************************************************
@@ -291,12 +295,29 @@ void set_recovered( individual *indiv, parameters* params, int time, model *mode
 *  Description: sets a person to susceptible
 *  Returns:		void
 ******************************************************************************************/
-void set_susceptible( individual *indiv, parameters* params, int time )
+void set_susceptible( individual *indiv, parameters* params, int time, model *model )
 {
 	indiv->status        = SUSCEPTIBLE;
 
 	infection_event *infection_event_ptr;
 	infection_event_ptr = indiv->infection_events;
+
+	// int strain_idx, transition_time;
+	// double draw;
+	// transition_time = sample_transition_time( model, RECOVERED_SUSCEPTIBLE );
+	// for( strain_idx = 0; strain_idx < N_STRAINS; strain_idx++ )
+	// {
+	// 	printf("strain %d before: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
+	// 	if( strain_idx == infection_event_ptr->strain_idx )
+	// 		indiv->time_susceptible[strain_idx] = time + transition_time;
+	// 	else
+	// 	{
+	// 		draw = gsl_rng_uniform( rng );
+	// 		if( draw < CROSS_IMMUNITY[infection_event_ptr->strain_idx][strain_idx] )
+	// 			indiv->time_susceptible[strain_idx] = time + transition_time;
+	// 	}
+	// 	printf("strain %d after: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
+	// }
 
 	int jdx;
 	indiv->infection_events = calloc( 1, sizeof(struct infection_event) );
@@ -484,7 +505,10 @@ void print_individual( model *model, long idx)
 	printf("indiv->base_random_interactions: %d\n", indiv->base_random_interactions );
 	printf("indiv->random_interactions: %d\n", indiv->random_interactions );
 
-	printf("indiv->hazard: %f\n", indiv->hazard );
+	printf("indiv->hazard:");
+	for( int strain_idx = 0; strain_idx < N_STRAINS; strain_idx++ )
+		printf(" %f", indiv->hazard[strain_idx]);
+	printf("\n");
 	printf("indiv->quarantined: %d\n", indiv->quarantined );
 	printf("indiv->quarantine_test_result: %d\n", indiv->quarantine_test_result );
 	

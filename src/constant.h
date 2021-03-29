@@ -141,6 +141,8 @@ extern const char* AGE_TEXT_MAP[N_AGE_GROUPS];
 extern const int EVENT_TYPE_TO_WARD_MAP[N_EVENT_TYPES];
 extern const char* DEFAULT_NETWORKS_NAMES[N_DEFAULT_NETWORKS];
 extern const int NEWLY_INFECTED_STATES[N_NEWLY_INFECTED_STATES];
+#define N_STRAINS 2
+extern const float CROSS_IMMUNITY[N_STRAINS][N_STRAINS];
 
 enum HOUSEHOLD_SIZE{
 	HH_1,
@@ -231,8 +233,6 @@ enum VACCINE_TYPES{
 #define NO_HOSPITAL -1
 #define HOSPITAL_WORK_NETWORK -1
 #define N_HOSPITAL_INTERACTION_TYPES 5
-
-#define N_STRAINS 2
 
 extern gsl_rng * rng;
 

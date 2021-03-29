@@ -175,7 +175,7 @@ void transmit_virus_by_type(
 )
 {
 	long idx, jdx, n_infected;
-	int day, n_interaction, t_infect;
+	int day, n_interaction, t_infect, strain_idx;
 	double hazard_rate, infector_mult;
 	event_list *list = &(model->event_lists[type]);
 	event *event, *next_event;
@@ -202,15 +202,17 @@ void transmit_virus_by_type(
 			{
 				interaction   = infector->interactions[ model->interaction_day_idx ];
 				infector_mult = infector->infectiousness_multiplier * infector->infection_events->strain_multiplier;
+				strain_idx = infector->infection_events->strain_idx;
 
 				for( jdx = 0; jdx < n_interaction; jdx++ )
 				{
-					if( interaction->individual->status == SUSCEPTIBLE )
+					// if( interaction->individual->status == SUSCEPTIBLE )
+					if( interaction->individual->time_susceptible[strain_idx] <= day )
 					{
 						hazard_rate   = list->infectious_curve[interaction->type][ t_infect - 1 ] * infector_mult;
-                        interaction->individual->hazard -= hazard_rate;
+                        interaction->individual->hazard[strain_idx] -= hazard_rate;
 
-						if( interaction->individual->hazard < 0 )
+						if( interaction->individual->hazard[strain_idx] < 0 )
 						{
 							new_infection( model, interaction->individual, infector, interaction->network_id );
 							interaction->individual->infection_events->infector_network = interaction->type;
@@ -350,7 +352,8 @@ void transition_one_disese_event(
 
 	if( to != NO_EVENT )
 	{
-		indiv->infection_events->times[to]     = model->time + ifelse( edge == NO_EDGE, 0, sample_transition_time( model, edge ) );
+		indiv->infection_events->times[to]     = model->time + ifelse( ( edge == NO_EDGE ), 0, sample_transition_time( model, edge ) );
+		// indiv->infection_events->times[to]     = model->time + ifelse( ( edge == NO_EDGE ) || ( edge == RECOVERED_SUSCEPTIBLE ), 0, sample_transition_time( model, edge ) );
 		indiv->next_disease_event = add_individual_to_event_list( model, to, indiv, indiv->infection_events->times[to] );
 	}
 }
@@ -507,7 +510,7 @@ void transition_to_recovered( model *model, individual *indiv )
 void transition_to_susceptible( model *model, individual *indiv )
 {
        transition_one_disese_event( model, indiv, SUSCEPTIBLE, NO_EVENT, NO_EDGE );
-       set_susceptible( indiv, model->params, model->time );
+       set_susceptible( indiv, model->params, model->time, model );
 }
 
 
