@@ -302,22 +302,22 @@ void set_susceptible( individual *indiv, parameters* params, int time, model *mo
 	infection_event *infection_event_ptr;
 	infection_event_ptr = indiv->infection_events;
 
-	// int strain_idx, transition_time;
-	// double draw;
-	// transition_time = sample_transition_time( model, RECOVERED_SUSCEPTIBLE );
-	// for( strain_idx = 0; strain_idx < N_STRAINS; strain_idx++ )
-	// {
-	// 	printf("strain %d before: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
-	// 	if( strain_idx == infection_event_ptr->strain_idx )
-	// 		indiv->time_susceptible[strain_idx] = time + transition_time;
-	// 	else
-	// 	{
-	// 		draw = gsl_rng_uniform( rng );
-	// 		if( draw < CROSS_IMMUNITY[infection_event_ptr->strain_idx][strain_idx] )
-	// 			indiv->time_susceptible[strain_idx] = time + transition_time;
-	// 	}
-	// 	printf("strain %d after: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
-	// }
+	int strain_idx, transition_time;
+	double draw;
+	transition_time = sample_transition_time( model, RECOVERED_SUSCEPTIBLE );
+	for( strain_idx = 0; strain_idx < N_STRAINS; strain_idx++ )
+	{
+		printf("strain %ld before: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
+		if( strain_idx == infection_event_ptr->strain_idx )
+			indiv->time_susceptible[strain_idx] = time + transition_time;
+		else
+		{
+			draw = gsl_rng_uniform( rng );
+			if( draw < CROSS_IMMUNITY[infection_event_ptr->strain_idx][strain_idx] )
+				indiv->time_susceptible[strain_idx] = time + transition_time;
+		}
+		printf("strain %d after: %d\n", strain_idx, indiv->time_susceptible[strain_idx]);
+	}
 
 	int jdx;
 	indiv->infection_events = calloc( 1, sizeof(struct infection_event) );
