@@ -105,8 +105,8 @@ const int NEWLY_INFECTED_STATES[N_NEWLY_INFECTED_STATES] = {
 };
 
 const float CROSS_IMMUNITY[N_STRAINS][N_STRAINS] = {
-	{1, 	0.5},
-	{0.2, 	1}
+	{1, 	0},
+	{0, 	1}
 };
 
 gsl_rng * rng;

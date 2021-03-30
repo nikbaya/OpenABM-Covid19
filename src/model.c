@@ -662,6 +662,37 @@ void set_up_seed_infection( model *model )
 				idx++;
 		}
 	}
+	// while( idx < 10 )
+	// {
+	// 	person = gsl_rng_uniform_int( rng, params->n_total );
+	// 	indiv  = &(model->population[ person ]);
+
+	// 	if( time_infected( indiv ) != NO_EVENT )
+	// 		continue;
+
+	// 	if( !params->hospital_on || indiv->worker_type == NOT_HEALTHCARE_WORKER )
+	// 	{
+	// 		if( seed_infect_by_idx( model, indiv->idx, 1, idx % 2, -1 ) )
+	// 			idx++;
+	// 	}
+	// }
+	// int strain_idx;
+	// while( idx < params->n_seed_infection )
+	// {
+	// 	person = gsl_rng_uniform_int( rng, params->n_total );
+	// 	indiv  = &(model->population[ person ]);
+
+	// 	if( time_infected( indiv ) != NO_EVENT )
+	// 		continue;
+
+	// 	if( !params->hospital_on || indiv->worker_type == NOT_HEALTHCARE_WORKER )
+	// 	{
+	// 		strain_idx = gsl_rng_uniform_int( rng, N_STRAINS );
+	// 		printf("seed strain %d\n", strain_idx);
+	// 		if( seed_infect_by_idx( model, indiv->idx, 1, strain_idx, -1 ) )
+	// 			idx++;
+	// 	}
+	// }
 }
 
 /*****************************************************************************************

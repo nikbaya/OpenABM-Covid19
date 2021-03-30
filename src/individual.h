@@ -70,6 +70,7 @@ struct individual{
 	event *vaccine_wane_event;
 
 	long time_susceptible[N_STRAINS];
+	// short status_to_strain[N_STRAINS];
 };
 
 struct interaction{

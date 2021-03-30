@@ -202,16 +202,15 @@ void transmit_virus_by_type(
 			{
 				interaction   = infector->interactions[ model->interaction_day_idx ];
 				infector_mult = infector->infectiousness_multiplier * infector->infection_events->strain_multiplier;
-				strain_idx = infector->infection_events->strain_idx;
+				strain_idx 	  = infector->infection_events->strain_idx;
 
 				for( jdx = 0; jdx < n_interaction; jdx++ )
 				{
 					// if( interaction->individual->status == SUSCEPTIBLE )
-					if( interaction->individual->time_susceptible[strain_idx] <= day )
+					if( ( interaction->individual->status == SUSCEPTIBLE ) && ( interaction->individual->time_susceptible[strain_idx] <= day ) )
 					{
 						hazard_rate   = list->infectious_curve[interaction->type][ t_infect - 1 ] * infector_mult;
                         interaction->individual->hazard[strain_idx] -= hazard_rate;
-
 						if( interaction->individual->hazard[strain_idx] < 0 )
 						{
 							new_infection( model, interaction->individual, infector, interaction->network_id );
@@ -353,7 +352,7 @@ void transition_one_disese_event(
 	if( to != NO_EVENT )
 	{
 		// indiv->infection_events->times[to]     = model->time + ifelse( ( edge == NO_EDGE ), 0, sample_transition_time( model, edge ) );
-		indiv->infection_events->times[to]     = model->time + ifelse( ( edge == NO_EDGE ) || ( edge == RECOVERED_SUSCEPTIBLE ), 0, sample_transition_time( model, edge ) );
+		indiv->infection_events->times[to]     = model->time + ifelse( ( edge == NO_EDGE ) || ( edge == RECOVERED_SUSCEPTIBLE ), 0, sample_transition_time( model, edge ) ); // instantaneously go from recovered to susceptible
 		indiv->next_disease_event = add_individual_to_event_list( model, to, indiv, indiv->infection_events->times[to] );
 	}
 }
